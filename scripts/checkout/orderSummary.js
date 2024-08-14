@@ -4,15 +4,12 @@ import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
+import { renderCheckoutHeader } from './checkoutHeader.js';
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
 
-  function updateHeaderQuantity() {
-    let cartQuantity = calculateCartQuantity();
-
-    document.querySelector('.js-header-quantity').innerHTML = `${cartQuantity} items`;
-  }
+  renderCheckoutHeader();
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
@@ -121,13 +118,9 @@ export function renderOrderSummary() {
     link.addEventListener('click', () => {
       const productId = link.dataset.productId;
       removeFromCart(productId);
-      updateHeaderQuantity();
-
-      const container = document.querySelector(
-        `.js-cart-item-container-${productId}`
-      );
-      container.remove();
-
+      
+      renderCheckoutHeader();
+      renderOrderSummary();
       renderPaymentSummary();
     });
   });
@@ -168,13 +161,14 @@ export function renderOrderSummary() {
     
       document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
     
-      updateHeaderQuantity();
+      renderCheckoutHeader();
   }
 
   document.querySelectorAll('.js-save-quantity-link').forEach((link) => {
     link.addEventListener('click', () => {
       const productId = link.dataset.productId;
       handleQuantityUpdate(productId);
+      renderPaymentSummary();
     });
   });
 
@@ -184,6 +178,7 @@ export function renderOrderSummary() {
         const productId = input.dataset.productId;
         handleQuantityUpdate(productId);
         event.preventDefault();
+        renderPaymentSummary();
       }
     });
   });
@@ -197,5 +192,5 @@ export function renderOrderSummary() {
     });
   });
 
-  updateHeaderQuantity();
+  renderCheckoutHeader();
 }

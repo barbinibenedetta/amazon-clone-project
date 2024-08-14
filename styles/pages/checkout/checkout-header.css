@@ -65,6 +65,7 @@
 
   display: flex;
   justify-content: center;
+
 }
 
 .return-to-home-link {
@@ -72,6 +73,9 @@
   font-size: 23px;
   text-decoration: none;
   cursor: pointer;
+  padding-right: 5px;
+  position: relative;
+  top: 2px;
 }
 
 @media (max-width: 1000px) {
