@@ -122,13 +122,13 @@ export function renderOrderSummary() {
   function handleQuantityUpdate(productId) {
     let newQuantity = Number(document.querySelector(`.js-quantity-input-${productId}`).value);
 
-    if (isNaN(newQuantity) || !newQuantity) {
-      alert('Error: product quantity must be a number');
+    if (newQuantity <= 0) {
+      alert('Error: product quantity cannot be less than 1');
       newQuantity = 1;
     }
 
-    if (newQuantity < 0) {
-      alert('Error: product quantity cannot be less than 0');
+    if (isNaN(newQuantity) || !newQuantity) {
+      alert('Error: product quantity must be a number');
       newQuantity = 1;
     }
     
