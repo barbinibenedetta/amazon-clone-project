@@ -1,3 +1,4 @@
+import { isValidDeliveryOption } from "./deliveryOptions.js";
 export let cart;
 export let cartQuantity = 0;
 
@@ -98,6 +99,14 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
       matchingitem = cartItem;
     }
   });
+
+  if(!matchingitem) {
+    return
+  }
+
+  if (!isValidDeliveryOption(deliveryOptionId)) {
+    return;
+  }
 
   matchingitem.deliveryOptionId = deliveryOptionId;
 

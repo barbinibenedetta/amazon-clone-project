@@ -14,6 +14,18 @@ export const deliveryOptions = [{
   priceCents: 999
 }];
 
+export function isValidDeliveryOption(deliveryOptionId) {
+  let found = false;
+
+  deliveryOptions.forEach((option) => {
+    if (option.id === deliveryOptionId) {
+      found = true;
+    }
+  });
+
+  return found;
+}
+
 export function getDeliveryOption(deliveryOptionId) {
   let deliveryOption;
 

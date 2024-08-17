@@ -1,5 +1,6 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import { loadFromStorage, cart } from "../../data/cart.js";
+import { renderPaymentSummary } from "../../scripts/checkout/paymentSummary.js";
 
 describe('test suite: renderOrderSummary', () => {
   const productId1 = 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6';
@@ -13,6 +14,7 @@ describe('test suite: renderOrderSummary', () => {
     <div class="js-order-summary"></div>
     <div class="js-product-quantity-${productId1}"></div>
     <div class="js-payment-summary"></div>
+    <div class="js-payment-summary-money-shipping"></div>
     `;
 
     spyOn(localStorage, 'getItem').and.callFake(() => {
@@ -73,5 +75,23 @@ describe('test suite: renderOrderSummary', () => {
     expect(
       document.querySelector(`.js-product-price-${productId2}`).innerText
     ).toEqual('$20.95');
+  });
+
+  it('updates the delivery option', () => {
+    document.querySelector(`.js-delivery-option-input-3-${productId1}`).click();
+    expect(
+      document.querySelector(`.js-delivery-option-input-3-${productId1}`).checked
+    ).toEqual(true);
+    expect(cart.length).toEqual(2);
+    expect(cart[0].productId).toEqual(productId1);
+    expect(cart[0].deliveryOptionId).toEqual('3');
+
+    renderPaymentSummary();
+    expect(
+      document.querySelector('.js-payment-summary-money-shipping').innerText
+    ).toEqual('$14.98');
+    expect(
+      document.querySelector('.js-payment-summary-money-total').innerText
+    ).toEqual('$63.50');
   });
 });
