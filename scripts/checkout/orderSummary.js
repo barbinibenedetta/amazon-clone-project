@@ -1,4 +1,4 @@
-import {cart, removeFromCart, calculateCartQuantity, updateQuantity, updateDeliveryOption} from '../../data/cart.js';
+import {cart} from '../../data/cart-class.js';
 import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
@@ -11,7 +11,7 @@ export function renderOrderSummary() {
 
   renderCheckoutHeader();
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
 
     const matchingProduct = getProduct(productId);
@@ -103,7 +103,7 @@ export function renderOrderSummary() {
   document.querySelectorAll('.js-delete-link').forEach((link) => {
     link.addEventListener('click', () => {
       const productId = link.dataset.productId;
-      removeFromCart(productId);
+      cart.removeFromCart(productId);
       
       renderCheckoutHeader();
       renderOrderSummary();
@@ -143,7 +143,7 @@ export function renderOrderSummary() {
     
       document.querySelector(`.js-cart-item-container-${productId}`).classList.remove("is-editing-quantity");
 
-      updateQuantity(productId, newQuantity);
+      cart.updateQuantity(productId, newQuantity);
     
       document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
     
@@ -172,7 +172,7 @@ export function renderOrderSummary() {
   document.querySelectorAll('.js-delivery-option').forEach((element) => {
     element.addEventListener('click', () => {
       const {productId, deliveryOptionId} = element.dataset;
-      updateDeliveryOption(productId, deliveryOptionId);
+      cart.updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
       renderPaymentSummary();
     });

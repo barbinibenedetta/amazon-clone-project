@@ -1,5 +1,5 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
-import { loadFromStorage, cart } from "../../data/cart.js";
+import {cart} from "../../data/cart-class.js";
 import { renderPaymentSummary } from "../../scripts/checkout/paymentSummary.js";
 
 describe('test suite: renderOrderSummary', () => {
@@ -17,25 +17,21 @@ describe('test suite: renderOrderSummary', () => {
     <div class="js-payment-summary-money-shipping"></div>
     `;
 
-    spyOn(localStorage, 'getItem').and.callFake(() => {
-      return JSON.stringify([{
-        productId: productId1,
-        quantity: 2,
-        deliveryOptionId: '1'
-      }, {
-        productId: productId2,
-        quantity: 1,
-        deliveryOptionId: '2'
-      }]);
-    });
-    
-    loadFromStorage();
+    cart.cartItems = [{
+      productId: productId1,
+      quantity: 2,
+      deliveryOptionId: '1'
+    }, {
+      productId: productId2,
+      quantity: 1,
+      deliveryOptionId: '2'
+    }];
 
     renderOrderSummary();
   });
 
   afterEach(() => {
-    document.querySelector('.js-test-container').innerHTML = '';
+   document.querySelector('.js-test-container').innerHTML = '';
   });
 
   it('displays the cart', () => {
@@ -70,8 +66,8 @@ describe('test suite: renderOrderSummary', () => {
     expect(
       document.querySelector(`.js-product-name-${productId2}`).innerText
     ).toEqual('Intermediate Size Basketball');
-    expect(cart.length).toEqual(1);
-    expect(cart[0].productId).toEqual(productId2);
+    expect(cart.cartItems.length).toEqual(1);
+    expect(cart.cartItems[0].productId).toEqual(productId2);
     expect(
       document.querySelector(`.js-product-price-${productId2}`).innerText
     ).toEqual('$20.95');
@@ -82,9 +78,9 @@ describe('test suite: renderOrderSummary', () => {
     expect(
       document.querySelector(`.js-delivery-option-input-3-${productId1}`).checked
     ).toEqual(true);
-    expect(cart.length).toEqual(2);
-    expect(cart[0].productId).toEqual(productId1);
-    expect(cart[0].deliveryOptionId).toEqual('3');
+    expect(cart.cartItems.length).toEqual(2);
+    expect(cart.cartItems[0].productId).toEqual(productId1);
+    expect(cart.cartItems[0].deliveryOptionId).toEqual('3');
 
     renderPaymentSummary();
     expect(
